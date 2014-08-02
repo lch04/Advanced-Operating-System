@@ -1,0 +1,131 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fnil\fcharset0 TrebuchetMS;\f1\fswiss\fcharset0 ArialMT;\f2\fnil\fcharset0 Verdana;
+}
+{\colortbl;\red255\green255\blue255;\red67\green67\blue67;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{circle\}}{\leveltext\leveltemplateid102\'01\uc0\u9702 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid2}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\tx1571\pardeftab720\sa348
+
+\f0\b\fs52 \cf0 Project 4: Recoverable Virtual Memory\
+\pard\pardeftab720
+
+\f1\fs28 \cf2 Introduction\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs20 \cf0 In this project you will implement a recoverable virtual memory system like the ones described in the LRVM and Rio Vista papers. Users of your library can create persistent segments of memory and then access them in a sequence of transactions.
+\fs26 \
+
+\fs20 You may work in groups of two.
+\fs26 \
+
+\fs20 Making the memory persistent is simple: simply mirror each segment of memory to a backing file on disk. The difficult part is implementing transactions. If the client crashes, or if the client explicitly requests an abort, then the memory should be returned to the state it was in before the transaction started.
+\fs26 \
+
+\fs20 To implement a recoverable virtual memory system you should use one or more log files. Before writing changes directly to the backing file, you must first write the intended changes to a log file. Then, if the program crashes, it is possible to read the log and see what changes were in progress.
+\fs26 \
+
+\fs20 More information is available in the above-mentioned papers. It is up to you how many log files to use and what specific information to write to them.
+\fs26 \
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 The API\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs20 \cf0 Fill out rvm.cpp and rvm_internal.h from a given code template to implement the following functions exactly:
+\fs26 \
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls1\ilvl0
+\f2\fs20 \cf0 {\listtext	\'95	}rvm_t rvm_init(const char *directory)
+\f0 \'a0- Initialize the library with the specified directory as backing store.
+\fs26 \
+\ls1\ilvl0
+\f2\fs20 {\listtext	\'95	}void *rvm_map(rvm_t rvm, const char *segname, int size_to_create)
+\f0 \'a0- map a segment from disk into memory. If the segment does not already exist, then create it and give it size\'a0
+\f2 size_to_create
+\f0 . If the segment exists but is shorter than\'a0
+\f2 size_to_create
+\f0 , then extend it until it is long enough. It is an error to try to map the same segment twice.
+\fs26 \
+\ls1\ilvl0
+\f2\fs20 {\listtext	\'95	}void rvm_unmap(rvm_t rvm, void *segbase)
+\f0 \'a0- unmap a segment from memory.
+\fs26 \
+\ls1\ilvl0
+\f2\fs20 {\listtext	\'95	}void rvm_destroy(rvm_t rvm, const char *segname)
+\f0 \'a0- destroy a segment completely, erasing its backing store. This function should not be called on a segment that is currently mapped.
+\fs26 \
+\ls1\ilvl0
+\f2\fs20 {\listtext	\'95	}trans_t rvm_begin_trans(rvm_t rvm, int numsegs, void **segbases)
+\f0 \'a0- begin a transaction that will modify the segments listed in\'a0
+\f2 segbases
+\f0 . If any of the specified segments is already being modified by a transaction, then the call should fail and return\'a0
+\f2 (trans_t) -1
+\f0 .\'a0
+\b Note that trant_t needs to be able to be typecasted to an integer type.
+\b0\fs26 \
+\ls1\ilvl0
+\f2\fs20 {\listtext	\'95	}void rvm_about_to_modify(trans_t tid, void *segbase, int offset, int size)
+\f0 \'a0- declare that the library is about to modify a specified range of memory in the specified segment. The segment must be one of the segments specified in the call to\'a0
+\f2 rvm_begin_trans
+\f0 . Your library needs to ensure that the old memory has been saved, in case an abort is executed. It is legal call\'a0
+\f2 rvm_about_to_modify
+\f0 \'a0multiple times on the same memory area.
+\fs26 \
+\ls1\ilvl0
+\f2\fs20 {\listtext	\'95	}void rvm_commit_trans(trans_t tid)
+\f0 \'a0- commit all changes that have been made within the specified transaction. When the call returns, then enough information should have been saved to disk so that, even if the program crashes, the changes will be seen by the program when it restarts.
+\fs26 \
+\ls1\ilvl0
+\f2\fs20 {\listtext	\'95	}void rvm_abort_trans(trans_t tid)
+\f0 \'a0- undo all changes that have happened within the specified transaction.
+\fs26 \
+\ls1\ilvl0
+\f2\fs20 {\listtext	\'95	}void rvm_truncate_log(rvm_t rvm)
+\f0 \'a0- play through any committed or aborted items in the log file(s) and shrink the log file(s) as much as possible.
+\fs26 \
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Test Cases\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs20 \cf0 In order to get a feel for how the above API is used, you should write some test cases that use the above functions and check whether they worked correctly. To implement your test cases, you will probably want to use multiple processes, started either with
+\f2 fork()
+\f0 \'a0or by starting programs from a shell script. You may also want to simulate crashes within the program; the\'a0
+\f2 exit()
+\f0 \'a0and
+\f2 abort()
+\f0 \'a0functions are useful for this.
+\fs26 \
+
+\fs20 Each test case should print out either "OK" or "ERROR"; if it prints "ERROR" then it should give some description of what went wrong.
+\fs26 \
+
+\fs20 I won't grade your test cases, but you are very likely to have fewer bugs in your program the more tests you write. Thus more tests have an indirect effect of increasing your score.
+\fs26 \
+
+\fs20 The attached code template includes some test cases (but not all) that TA will use.
+\fs26 \
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Deliverables\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 You must make your code work on
+\i \'a0
+\i0\b Ubuntu 12.04 on 64-bit x86 hardware (no virtualization)
+\b0 , which is what the TA will run your code on. Note that some linux distributions and different version of kernel may show different behaviors for the functions mentioned above. If you want to use different platform, please discuss with TA.\uc0\u8232 \u8232 For this assignment, you need to submit the following files.\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls2\ilvl0\cf0 {\listtext	\'95	}rvm_internal.h (this defines your own data structures including rvm_t and trans_t)\
+{\listtext	\'95	}rvm.cpp (this implements the rvm interfaces that are previously described)\
+{\listtext	\'95	}README file including\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls2\ilvl1\cf0 {\listtext	\uc0\u9702 	}How you use logfiles to accomplish persistency plus transaction semantics.\
+{\listtext	\uc0\u9702 	}What goes in them? How do the files get cleaned up, so that they do not expand indefinitely?\
+\pard\pardeftab720\sa260
+\cf0 When submitting, 
+\b do not compress and just upload the individual files
+\b0 . You have to make sure that your code works with the given template. You can simply fill out the given rvm.cpp and rvm_internal.h in the template to ensure this.\uc0\u8232 \u8232 If two students worked as a team, one should submit all materials mentioned above, and another student should submit a textfile including their names.\
+}

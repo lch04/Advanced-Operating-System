@@ -1,0 +1,285 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fnil\fcharset0 TrebuchetMS;\f1\fswiss\fcharset0 ArialMT;\f2\fnil\fcharset0 Verdana;
+}
+{\colortbl;\red255\green255\blue255;\red67\green67\blue67;\red1\green21\blue44;\red109\green109\blue109;
+}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid101\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid102\'02\'01.;}{\levelnumbers\'01;}\fi-360\li1440\lin1440 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid103\'02\'02.;}{\levelnumbers\'01;}\fi-360\li2160\lin2160 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}
+{\list\listtemplateid4\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid301\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid4}
+{\list\listtemplateid5\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid401\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid5}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}{\listoverride\listid4\listoverridecount0\ls4}{\listoverride\listid5\listoverridecount0\ls5}}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sa321
+
+\f0\b\fs48 \cf0 Project 3: RPC-Based Proxy Server\
+\pard\pardeftab720
+
+\f1\fs28 \cf2 Introduction\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Remote Procedure Calls (RPC) are a powerful and commonly-used abstraction for constructing distributed applications. {\field{\*\fldinst{HYPERLINK "https://thrift.apache.org/"}}{\fldrslt \cf3 \ul \ulc3 Apache Thrift}} is a modern technology for making remote procedure calls that is both efficient and extensible. Other RPC systems include XML-RPC, JSON-RPC, Sun/ONC RPC, plus web services and systems that build RPC-like functionality on top of RESTful interfaces (such as Java RESTlets).\
+In this project, you will do the following:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls1\ilvl0\cf0 {\listtext	1.	}Write a simple web 'proxy server' using Apache Thrift.\
+{\listtext	2.	}Investigate and implement different caching schemes for your service.\
+{\listtext	3.	}Evaluate the performance of your service under different load conditions and using different caching schemes.\
+\pard\pardeftab720\sa260
+\cf0 This project has two basic goals: First is introducing you to programming with a real remote procedure call system. Second is exploring the principles and performance of caching schemes in a distributed application.\
+You should work in groups of two for this project.\
+\'a0\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Specific Details\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 You should do the following. This may seem like a lot, but if you take it one step at a time, that will help you get through it all.\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls2\ilvl0\cf0 {\listtext	1.	}Implement a simple RPC server and client using Apache Thrift. This should be a "Hello World" style program. You should create a single RPC method that the server implements (e.g., return the current time), create a server that implements it, and then create a client program that calls the server method and prints the result. When testing, be sure your client and server can run successfully on two different machines - the point of RPC is that you can call a funciton across the netwrok. For more information about Thrift, see below.\
+{\listtext	2.	}Turn your server into a basic proxy server. (Don't worry about the caching part yet.) Modify your server's RPC method to take a URL parameter and return the body of the document located at that URL. Now change the server implementation so that it makes an HTTP GET request for the provided URL, receives the HTTP response, and returns the document body from the HTTP response. You can use the libcurl library to make the HTTP GET request - you do not need to implement any part of the HTTP protocol yourself, unless you want to! More information about using libcurl is below. To test this, you can modify your client to take a URL on the command line, call the RPC method on the server, and print the resulting body text. Then test it with some familiar URLs.\
+{\listtext	3.	}Now that you have a proxy server that can retrieve web documents and respond to RPC requests for a document at a URL, you should add a caching mechanism to your proxy server. A web cache in your proxy server can improve performance for much the same reason that the local web cache in your browser does - it's faster to retrieve a document from memory (or disk) than to go across the Internet to get it. Although the distance from the client to the proxy server must still be traversed, the scenario for using this is that they would be on the same local network, making it still much faster to get a document from a web cache on the proxy server than to go to its original source on the Internet. Here are some parameters for your web cache:\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls2\ilvl1\cf0 {\listtext	1.	}You will be asked to implement more than one caching policy (details below), so it will save you trouble if you create a nice interface that separates your cache from the rest of the proxy server (where the Thrift code and curl/HTTP code are), because the rest of the proxy server doesn't need to change. Then you can just recompile with a different proxy server source file (but the same server code) to create a proxy server that implements a different caching policy. Take a moment to think about a "web cache" abstraction and what kind of methods it would need to provide in order for the proxy server to use it.\
+{\listtext	2.	}When the RPC method is called, the server should first check the web cache to see if the document is present, and if so it can return that copy of the document. If not, it will need to fetch the document from the Internet (as it did before you added the web cache), add the document to the web cache (which may require evicting one or more documents form the cache to make room), and then return the document.\
+{\listtext	3.	}Implement your web cache as an in-memory cache. Don't worry about saving anything on disk.\
+{\listtext	4.	}Your cache should have a size limit (e.g., 1024 KB) that the total size of all cached documents should not exceed. That's only the size of the document bodies; any metadata about the documents maintained by your cache need not count against the limit. Better still, make the cache size a configurable option; this will make your life a little easier when you need to run experiments later (details below).\
+{\listtext	5.	}You don't have to worry about canonicalizing URLs for uniqueness. (In other words, don't worry about the fact that\'a0
+\i http://www.google.com
+\i0 \'a0and\'a0
+\i http://www.google.com/index.html
+\i0 \'a0are actually the same thing.)\
+{\listtext	6.	}Your cache lookup shouldn't be completely brain-dead: You shouldn't need to look at every item in the cache to determine if a document is present in the cache. (In other words, cache lookup should be sub-linear, or computational complexity should be 
+\i better
+\i0  than O(N)). This means you should probably use some sort of search tree or a hashing-based approach to lookup.\
+{\listtext	7.	}For this project, you are to implement at least three policies (that is, the policies that determine which document(s) to evict from the cache when adding a document for which there is not room):\
+\pard\tx1660\tx2160\pardeftab720\li2160\fi-2160
+\ls2\ilvl2
+\b \cf0 {\listtext	1.	}Random 
+\b0 (a document is chosen at random from the cache to evict - this is a good "baseline" to compare against\
+{\listtext	2.	}Your choice, one of: 
+\b FIFO 
+\b0 or 
+\b Least Recently Used
+\b0  (this can be an approximation based on some fixed history or "absolute" based on time-stamps)\
+\ls2\ilvl2
+\b {\listtext	3.	}Your choice
+\b0  of any one other policy from the list below\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls2\ilvl0\cf0 {\listtext	4.	}Before you can measure your cache policies, it would be helpful for the client to be able ot make a bunch of requests instead of just one, so let's do that now. You can use a list of URLs; it's probably most convenient to read the list from a file so you can build and change the list easily, but it's up to you. Then have your client make a number of requests from the URLs in the list.\
+{\listtext	5.	}Next you want to think about your metrics. What would be a good measure of success for a cache? There are man options - pick one or two that you think are good choices. When you do your writeup, clearly describe what you metric(s) are and why you chose them. You may discuss ideas for good metrics with other groups - since there are a number of options, not everybody will necessary reach the same conclusions. (Justifying your choice will be as important as the choice itself, though.) Now modify your client and/or server to measure your chosen metrics.\
+{\listtext	6.	}When you implemented the URL list for your client, you may have done something simple, like going through the list in order. However, different workloads (e.g., orders of requests) may produce better or worse results on different cache policies. Alternate workloads could include going through the list in some pattern, e.g., A-B-A-C-A-D-A-etc. or choosing URLs at random. You could even implement a statistical distribution so your radom selection might not be uniformly random. Other methods for creating a workload may be possible as well. You should come up with two different workloads to use in your experiments. You should select these workloads such that you get different performance results with them, and also such that your different cache policies produce different performance results. (So you may want to take some time to think about under what conditions each cache police would perform well, and under which they would perform poorly.) Your writeup should clearly describe the two chosen workloads. Implement both workloads so that you can measure your chosen metrics with each. (If it turns out easiest to write two different client programs - one for each workload, then you may do so. Depening on what the workloads are, this may or may not be the case, though.)\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls2\ilvl1\cf0 {\listtext	1.	}To implement workloads, you may find helpful to give an index number to each URL. (The index number doens't have to be in your URL file; you can just assign them in order as the URLs are read from the file.)\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls2\ilvl0\cf0 {\listtext	7.	}Now run experiments to measure the performance of your caching proxy. You will evaluate your proxy under both workloads with no caching and then with each of your cache replacement policies. (That should make 8 combinations total.)\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls2\ilvl1\cf0 {\listtext	1.	}"no caching" is equivalent to simply having a cache size of zero for many policies, so you may not need to implement a separate "no caching" policy if you've built your other policies to do the sensical thing when cache size is set to 0.\
+{\listtext	2.	}You should see how the cache size affects the performance for all your cache policies (except, of course, the "no caching" policy).\
+{\listtext	3.	}Your cache should be relatively small compared to the total set of possible requested documents because you want a lot of cache contention.\
+{\listtext	4.	}Your client and server should run on different machines for the experiments, but those two machines should be closer to each other than to any of the requested URLs. That way it should be much faster to contact the proxy and get a cached document than to go to the original server for the document. (This may mean, for example, that if both machines are on the campus network, requesting www.gatech.edu may not be the best choice, but most non-gatech URLs should be okay.)\
+\pard\pardeftab720\sa260
+\cf0 \'a0\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Replacement Policy\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 A cache of any kind must have a replacement policy. This is the policy that is used whenever a new item is added to a full cache (in order to decide which old item to evict). That is, the new item\'a0
+\i replaces
+\i0 \'a0some other object in the cache. Some common strategies are:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls3\ilvl0\cf0 {\listtext	\'95	}Least Recently Used (LRU) -- remove the item that has been requested least recently. The idea is that items requested recently are more likely to be requested in the near future.\
+{\listtext	\'95	}Least Frequently Used (LFU) -- remove the item that is accessed the least frequently. The idea is that the statistical behavior will continue over time, and thus that items used frequently in the past will be used frequently in the future.\
+{\listtext	\'95	}First-In First-Out (FIFO) -- remove the item that has been in the cache the longest. The idea is that pollution by old items should be prevented. (This is different from LRU because it measures when the item was added to the cache; LRU measures when the item was last read.)\
+{\listtext	\'95	}Random (RAND) -- remove an item at random. The idea is that, even if it does not perform maximally well, it will not perform maximally abysmal under any load.\
+{\listtext	\'95	}Largest Size First (MAXS) -- remove the item which has the largest size, assuming that users are less likely to re-access large documents because of the high access delay associated with such documents.\
+{\listtext	\'95	}LRU-MIN -- a variant of LRU which tries to minimize the number of documents replaced and gives preference to small-size documents to stay in the cache. If an incoming document with size S does not fit in the cache, the policy considers documents whose sizes are no less than S for eviction using the LRU policy. If there is no document with such size, the process is repeated for documents whose sizes are at least S/2, then documents whose sizes are at least S/4, and so on. See the paper\'a0{\field{\*\fldinst{HYPERLINK "http://ei.cs.vt.edu/~succeed/WWW4/WWW4.html"}}{\fldrslt \cf3 \ul \ulc3 Caching Proxies: Limitations and Potentials}}\'a0for more details about LRU-MIN.\
+{\listtext	\'95	}Greedy-Dual-Size (GDS) -- removes the item with the lowest value of H. Each item starts off with a value of H = (cost of bringing the item to cache / size of the item). When an item is replaced, decrement all of the other items H values by the replaced item's H value. When items are accessed again, restore H to the original H value (cost / size). The cost function is parameterized.\
+{\listtext	\'95	}Greedy-Dual-Size-Frequency (GDSF) -- even more complex modification of GDS. See\'a0{\field{\*\fldinst{HYPERLINK "http://www.hpl.hp.com/techreports/98/HPL-98-69R1.pdf"}}{\fldrslt \cf3 \ul \ulc3 Improving WWW Proxies Performance with Greedy-Dual- Size-Frequency Caching Policy}}\
+\pard\pardeftab720
+\cf0 Note that performance of different policies will depend on the queries that a client generates. Please specify how you generated thoese queries, e.g., using random / uniform distribution, and relate them to the performance measurements in your report.\
+\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Apache Thrift\
+\pard\pardeftab720
+
+\f0\b0\fs26 \cf0 To install Thrift, you may be able to use your Linux package manager (e.g., apt-get). If it's not available there, you can download it from the {\field{\*\fldinst{HYPERLINK "https://thrift.apache.org/"}}{\fldrslt \cf3 \ul \ulc3 Thrift site}}. (There is a Windows compiler too, but you should do this project on Linux.) Installation instructions are {\field{\*\fldinst{HYPERLINK "https://thrift.apache.org/docs/install/"}}{\fldrslt \cf3 \ul \ulc3 here}}.\
+\
+You can find Thrift {\field{\*\fldinst{HYPERLINK "https://git-wip-us.apache.org/repos/asf/thrift/?p=thrift.git;a=tree;f=tutorial"}}{\fldrslt \cf3 \ul \ulc3 examples here}} in many languages. Although Thrift offers cross-language support, all your code should be C++. (If you're more comfortable with C than C++, don't feel you need to do anything object oriented beyone the stub code that the Thrift compiler will generate for you anyway.)\
+\
+You can read the whitepaper on the Thrift site if you want to see how Thrift is extensible. However, it's probably not necessary for this assignment, since we're just using the options Thrift comes with out-of-the-box.\
+\pard\pardeftab720\sa260
+\cf0 \'a0\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 libcurl\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 libcurl is a powerful library for communicating with servers via HTTP (and FTP, LDAP, HTTPS, etc.). It supports HTTP GET/PUT/POST, form fields, cookies, etc. The purpose of using it in this assignment is to simplify your life. Instead of writing lower-level sockets code to talk HTTP to a webserver and request a page, you can simply use libcurl (which can do the same in a few function calls). In fact, you can just use the example code demonstrating how to perform a simple HTTP GET request. If you want to implement your own socket-based code to talk to the remote webserver, it will mean more work for you but you're welcome to do so (just remember that it is not the focus of this project).\
+example.c is sample code that uses libcurl to perform an HTTP GET of a specified URL (just run "
+\f2 gcc example.c -lcurl
+\f0 " to compile it). The resultant data (just the data, not the headers) is captured into a dynamically allocated buffer and then written to stdout. You can use this code with few modifications directly in the proxy to perform the proxy GET requests.\
+If you have trouble with servers returning errors complaining about the lack of an HTTP User-Agent field, add a curl_easy_setopt(handle, CURLOPT_USERAGENT, "<agent name>"); before the curl action is performed.\
+\'a0\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Resources\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 The following documents have useful information on Thrift, libcurl, and relevant network protocols. You will need to have a cursory understanding of the protocols in order to do this project, but do not bother becoming extremely knowledgable about them just for this project.\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls4\ilvl0\cf3 {\listtext	\'95	}{\field{\*\fldinst{HYPERLINK "http://curl.haxx.se/libcurl/c/"}}{\fldrslt \ul libcurl C Interface overview}}\cf0 \
+\ls4\ilvl0\cf3 {\listtext	\'95	}{\field{\*\fldinst{HYPERLINK "https://thrift.apache.org/"}}{\fldrslt \ul Apache Thrift official site}}\cf0 \
+\ls4\ilvl0\cf3 {\listtext	\'95	}{\field{\*\fldinst{HYPERLINK "https://diwakergupta.github.io/thrift-missing-guide/"}}{\fldrslt \ul Thrift: The Missing Guide}}\cf0  - contains more details about Thrift (including how Thrift types map to C++ types)\
+{\listtext	\'95	}...looking for more resources. If you find something that's really helpful, post it on Piazza! That will help other students, plus the TAs may add it here as well.\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Writeup Guidelines\
+\pard\pardeftab720
+
+\f0\b0\fs26 \cf0 Half your project grade will come from completing your code and experiments. The other half is from the writeup. The following shows what information must be in the writeup, how much of the score is allocated to each part of the writeup, and what a "good" (i.e., full score for that part) writeup will look like. (The parts do not necessarily need to appear in the order shown here, but all the relevant information must be present somewhere in the writeup.)\
+\
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrt\brdrs\brdrw20\brdrcf4 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\qc
+
+\b \cf0 Part\cell 
+\pard\intbl\itap1\pardeftab720\qc
+\cf0 Grade\cell 
+\pard\intbl\itap1\pardeftab720\qc
+\cf0 Should look like this...\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\b0 \cf0 Intorudction & Conclusion\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 2%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 Intro explains briefly what you built, what you measured, and what you found from your experiments. Conclusion should reiterate this, with more weight on the conclusion you reach from your experiments.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Cache Design Description\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 6%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 Clearly explains the operations the cache supports, the data structure(s) used, and the algorithms that implement the cache operations. (Note: no need to explain how standard data structures or algorithms work, e.g., "linked list" or "linear search" can be named without further explaination)\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Caching Policies (3) Description\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 10%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 Each of three cache policies is described clearly, describing how evictions are chosen and what the good & bad points of such a policy are. The reader should understand well enough to replicate these cache policies.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Metrics for Evaluation\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 6%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 The chosen metrics for evaluation are described clearly, so it is easily understood what each metric represents and measures, and a justification is given for why each metric was chosen. Chosen metrics accurately reflect how "good" the cache policies they measure are. The reader should understand well enough to use these metrics him/herself and get comparable results.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Workloads (2) Description\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 6%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 Each of two workloads is described clearly, so it is easily understood how each workload is generated. The reader should understand well enough to replicate these workloads. (Note: the exact list of URLs used is not needed; the pattern in which they are accessed is what matters)\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Experiment Description\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 4%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 The experimental methodology is described clerly, including machines used, how they are networked, the software run, what was measured and how, and the procedures used. A hypothesis is given regarding which policies will and won't work well on each workload, with justification for that belief. (Note: it is not necessary for these hypotheses to match the actual results, as long as the discrepency is discussed in the analysis; it's okay for hypothese to be wrong!)\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Experimental Results\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 4%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 Experimental results are presented using graphs that show the chosen metrics vs. the cache size. Results are given for each policy running against each workload. Graphs are presented in a clear an legible manner, with a descriptive title/caption, labeled axes (including unit labels), scales, distinguishable lines (on mult-series graphs), and a legend (on multi-series graphs). (Note: no need to present any raw data; the graphs are sufficient - if you want to include raw data, do so in a separate file, not in the writeup)\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Analysis of Results\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 8%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 All features on the presented graphs are identified and described clearly. An explaination is given for each feature on the graphs.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Logical Flow\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 2%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 The writeup flows in a logical manner that makes it easy to follow from one paragraph to the next, and one section to the next. It does not jump erratically between different ideas. The flow of ideas from each sentance to the next should also support, and not confuse the point of a paragraph.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth11200\trftsWidth3 \trbrdrl\brdrs\brdrw20\brdrcf4 \trbrdrb\brdrs\brdrw20\brdrcf4 \trbrdrr\brdrs\brdrw20\brdrcf4 
+\clvertalc \clshdrawnil \clwWidth1560\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth8600\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf4 \clbrdrl\brdrs\brdrw20\brdrcf4 \clbrdrb\brdrs\brdrw20\brdrcf4 \clbrdrr\brdrs\brdrw20\brdrcf4 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+\cf0 Writing\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 2%\cell 
+\pard\intbl\itap1\pardeftab720
+\cf0 Grammar, spelling, and punctuation are sufficient to enable understanding. If meaning is hard to understand due to poor grammar or excessively awkward phrasing, points may be deducted.\cell \lastrow\row
+\pard\pardeftab720
+\cf0 \
+\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Submission Instructions\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Let's try something different... Do 
+\i not
+\i0  submit a tarball.
+\i \uc0\u8232 
+\i0 Instead, just attach the following files directly to your submission in T-Square:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls5\ilvl0\cf0 {\listtext	\'95	}All your code (proxy server and client, plus any testing harness)\
+{\listtext	\'95	}Makefile\
+{\listtext	\'95	}README (explain how to build and how to run the experiments)\
+{\listtext	\'95	}Your write-up (PDF)\
+}

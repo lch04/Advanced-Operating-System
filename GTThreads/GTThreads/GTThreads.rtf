@@ -1,0 +1,280 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fnil\fcharset0 TrebuchetMS;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 ArialMT;
+\f3\fnil\fcharset0 Verdana;}
+{\colortbl;\red255\green255\blue255;\red67\green67\blue67;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{circle\}}{\leveltext\leveltemplateid102\'01\uc0\u9702 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{circle\}}{\leveltext\leveltemplateid202\'01\uc0\u9702 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{square\}}{\leveltext\leveltemplateid203\'01\uc0\u9642 ;}{\levelnumbers;}\fi-360\li2160\lin2160 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{square\}}{\leveltext\leveltemplateid204\'01\uc0\u9642 ;}{\levelnumbers;}\fi-360\li2880\lin2880 }{\listname ;}\listid3}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\tx1571\pardeftab720\sa348
+
+\f0\b\fs52 \cf0 Project 1: GTThreads
+\f1\b0\fs24 \
+\pard\pardeftab720
+
+\f2\b\fs26 \cf2 Instructions\
+\pard\pardeftab720\sa300
+
+\fs30 \cf2 Goal\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 You are to implement GTThreads -- a\'a0preemptive\'a0user-level thread package with an API similar to Pthreads (details below). You are to demonstrate your library by further implementing a solution to the classic Dining Philosophers problem.\
+First you must implement the core of the thread library as well as a thread scheduler. The scheduler must be a\'a0preemptive round robin\'a0scheduler. Each thread is assigned a time slice (its quantum) for which it is allowed to run; a thread is preempted if it used up its quantum. Preemption can be achieved by using an alarm signal as a timer. You may use the system's virtual time instead of wall-clock time, man setitimer(2) for details. The preemption period in microseconds should be specified in a function, (i.e.
+\f3 gtthread_init(period)
+\f0 ). Any program using your GTThreads package must call the function first.\uc0\u8232 \'a0\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 Collaboration\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Students are allowed to discuss concepts and techniques for solving development problems. However, sharing implementations and code is not allowed. Each student is expected to turn in code that he/she wrote him/herself.\uc0\u8232 \'a0\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 GTThreads API\
+\pard\pardeftab720
+
+\f0\b0\fs26 \cf0 The GTThreads API should contain the following functions. The library interface must match the one specified here\'a0exactly. If the signature is different, and as a result, your code is not compiled with test cases,\'a0you will get 0 credit.\
+\'a0\
+\pard\pardeftab720
+
+\f3\fs24 \cf0 void gtthread_init(long period);\
+int\'a0 gtthread_create(gtthread_t *thread,\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 void *(*start_routine)(void *),\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 void *arg);\
+int\'a0 gtthread_join(gtthread_t thread, void **status);\
+void gtthread_exit(void *retval);\
+int\'a0 gtthread_yield(void);\
+int\'a0 gtthread_equal(gtthread_t t1, gtthread_t t2);\
+int\'a0 gtthread_cancel(gtthread_t thread);\
+gtthread_t gtthread_self(void);
+\f0\fs26 \
+\
+Next, you have to implement a mutex synchronization primitive to enable safe concurrent manipulation of shared data. The API for the mutex primitive should be as follows:\
+\'a0\
+
+\f3\fs24 int\'a0 gtthread_mutex_init(gtthread_mutex_t *mutex);\
+int\'a0 gtthread_mutex_lock(gtthread_mutex_t *mutex);\
+int\'a0 gtthread_mutex_unlock(gtthread_mutex_t *mutex);
+\f0\fs26 \
+\
+An example 
+\f3 gtthread.h
+\f0  header file with prototypes for all the API functions listed here is attached. Feel free to use it, modify it (e.g., to add data structures), or create your own. However, be sure you stick to these prototypes exactly or else our testing/grading code will not be able to bind to it properly.\
+\'a0\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 GTThreads Semantics\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Each function in GTThreads is analagous to a PThreads function; simply replace the\'a0
+\f3 gtthread_
+\f0 \'a0at the beginning with
+\f3 pthread_
+\f0 . There are two exceptions to this naming pattern:\'a0
+\f3 gtthread_init(period)
+\f0 \'a0is a unique function to GTThreads, and
+\f3 gtthread_yield()
+\f0 \'a0is analagous to the PThread function\'a0
+\f3 sched_yield()
+\f0 . Be sure to 'man' the functions you are emulating so you understand how they're supposed to behave. Consulting other PThreads references will probably be helpful as well. Your GTThreads should behave identically to PThreads, with the following exceptions:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls1\ilvl0\cf0 {\listtext	1.	}The\'a0
+\f3 gtthread_init(period)
+\f0 \'a0function must be called from the main thread before\'a0
+\i any
+\i0 \'a0other GTThreads functions are called. It allows the caller to specify the scheduling period (quantum in microseconds), and may also perform any other initialization you deem necessary. Calling other GTThreads functions before the library is initialized is semantically invalid, and you may assume it will not be done; you do not need to check for this as an error condition.\
+{\listtext	2.	}The\'a0
+\f3 gtthread_create(thread, start_routine, arg)
+\f0 \'a0function does not have an\'a0
+\f3 attr
+\f0 \'a0parameter. All your threads should behave as if they have default PThread attributes (i.e. as if you specified\'a0
+\f3 NULL
+\f0 \'a0for\'a0
+\f3 attr
+\f0 ).\
+{\listtext	3.	}In addition to not needing to implement attributes, you may have noticed that there is no\'a0
+\f3 gtthread_detach(thread)
+\f0 function. You are not required to implement detached threads; all threads should be joinable\
+{\listtext	4.	}The\'a0
+\f3 gtthread_cancel()
+\f0 \'a0function does not have to implement deferred cancelation; all cancelled threads should be killed immediately.\
+{\listtext	5.	}Instead of a priority scheduler, you should implement a round-robin scheduler. It should still be preemptive, however.\
+{\listtext	6.	}The\'a0
+\f3 gtthread_mutex_init(mutex)
+\f0 \'a0function does not have an\'a0
+\f3 attr
+\f0 \'a0parameter. All your mutexes should behave as if they have default mutex attributes (i.e. as if you specified\'a0
+\f3 NULL
+\f0 \'a0for\'a0
+\f3 attr
+\f0 ).\
+{\listtext	7.	}You are\'a0
+\i not
+\i0 \'a0required to implement\'a0
+\f3 gtthread_mutex_destroy(mutex)
+\f0 ,\'a0
+\f3 gtthread_mutex_trylock(mutex)
+\f0 , or a static initializer (e.g.\'a0
+\f3 GTTHREAD_MUTEX_INITIALIZER
+\f0 ).\
+{\listtext	8.	}Many of these pthread functions either return an error code or return non-zero and set 
+\f3 errno
+\f0  to an error code when they have an error. These error codes tell the caller what, specifically, went wrong. However, you do not need to return proper error codes in your gtthread library; simply returning non-zero when an error occurrs is good enough, and you do not ever need to set 
+\f3 errno
+\f0 . (It's also okay for a function to always return zero if it is written in a way that it cannot ever fail. Error returns are only needed when errors occur.)\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 Suggestions\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls2\ilvl0
+\f0\b0\fs26 \cf0 {\listtext	\'95	}The initial thread of the program (i.e. the one running\'a0
+\f3 main()
+\f0 \'a0) is a thread exactly like any other. It should have a
+\f3  gtthread_t
+\f0 , you should be able to get it by calling\'a0
+\f3 gtthread_self()
+\f0 \'a0from the initial thread, and you should be able to specify it as an argument to other GTThreads functions. The only difference in the initial thread is how it behaves when you execute a\'a0
+\f3 return
+\f0 \'a0instruction. You can find details on this difference in the man page for\'a0
+\f3 pthread_create
+\f0 .\
+{\listtext	\'95	}One way to achieve preemption is using an alarm signal. In addition, you may use the system's virtual time instead of wall-clock time. Virtual time does not count CPU cycles spent on other processes, and decrements only when the calling process is running. The\'a0
+\f3 setitimer()
+\f0 \'a0function can be used to generate\'a0
+\f3 SIGVTALRM
+\f0 \'a0signals at a specified interval. You will need to establish a signal handler for the signal (man signal(2) and signal(7) for more information on signals). Test your package with different scheduling preiods to determine an appropriate value.\
+{\listtext	\'95	}One way to perform context switching is using the\'a0
+\f3 makecontext() / getcontext() / setcontext() / swapcontext()
+\f0 \'a0functions. Note that these functions do not act like normal C functions, which is in fact the point. Consult the man pages on these functions for details.\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls2\ilvl1\cf0 {\listtext	\uc0\u9702 	}The\'a0
+\f3 *context()
+\f0 \'a0functions are fairly platform-independent, but may be unsafe in signals. If you choose this approach, please report in your README any potential signal-safe issues in your scheduler if there are any.\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls2\ilvl0\cf0 {\listtext	\'95	}Work incrementally! First try to implement thread switching before moving on to the nice library interface.\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 The Dining Philosophers\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Finally, you have to implement a solution to the classic Dining Philosophers problem using your implementation of GTThreads. The problem statement is as follows:\
+\pard\pardeftab720
+\cf0 Five philosophers are sitting at a round table doing their two favorite things: eating and thinking. Each philosopher has their own bowl of rice, but unfortunately there are only five chopsticks for the entire table. The chopsticks are spaced equally around the table, one between each pair of neighboring rice bowls. Whenever a philosopher wants to eat, they must acquire a chopstick from the both the left and the right; if one of the two chopsticks is already in use, then the philosopher must wait hungrily until it is released. Whenever a philosopher wants to stop eating and think for a while, they must release any chopsticks they hold and put them back on the table.\
+\pard\pardeftab720\sa260
+\cf0 In your implementation, each philosopher should have a thread which alternates between eating and thinking, spending a random amount of time in each mode. Chopsticks are a shared resource and each must be protected by a mutex. Each thread should print out status information, such as "Philosopher #1 is hungry", "Philosopher #1 tries to acquire left chopstick", "Philosopher #1 releases right chopstick", etc.\
+VERY IMPORTANT:\'a0Your algorithm should not have deadlocks regardless of the scheduling period used by your thread system and the order that threads run.\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 Makefile\
+\pard\pardeftab720\sa260
+
+\f3\b0\fs26 \cf0 Makefile
+\f0 \'a0should generate\'a0
+\f3 gtthread.a
+\f0  (assuming 
+\f3 gtthread.h
+\f0  is provided statically; alternatively you may have your 
+\f3 Makefile
+\f0  generate 
+\f3 gtthread.h
+\f0 .) Both files\'a0must\'a0be in the directory where Makefile is. If you are not familiar with Makefile, google it. A sample 
+\f3 Makefile
+\f0  is attached to this assignment; feel free to use it, modify it, or create your own.\
+\pard\pardeftab720
+\cf0 \
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 Example\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 We will go through 25 test cases to evaluate your library. One example (
+\f3 test1.c
+\f0 ) is attached to this assignment.\
+\pard\pardeftab720
+\cf0 This code should be compiled with your library with something like following command:\
+\pard\pardeftab720
+
+\f3 \cf0 gcc -Wall -pedantic -I\{...\} -o test1 test1.c gtthread.a\
+\pard\pardeftab720\sa260
+
+\f0 \cf0 \'a0\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 Test Cases Hints\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Checks thread creation, arguments, return values for different functions, scheduling and preemption.\uc0\u8232 \'a0\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 Platform\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 You can develop your code in any architecture. However, make sure that your code runs properly on 
+\b Ubuntu 12.04 on 64-bit x86 hardware (no virtualization)
+\b0 , which is what the TA will run your code on. Note that some linux distributions and different version of kernel may show different behaviors for the functions mentioned above. If you want to use different platform, please discuss with TA.\uc0\u8232 \'a0\
+\pard\pardeftab720\sa300
+
+\f2\b\fs30 \cf2 Deliverables\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls3\ilvl0
+\f0\b0\fs26 \cf0 {\listtext	\'95	}Turn in a tarball (.tar.gz file; 
+\f3 man tar(1)
+\f0  and see the 
+\f3 z
+\f0 , 
+\f3 c
+\f0 , and 
+\f3 f
+\f0  flags; and example is attached) named 
+\f3 gtthread.tar.gz
+\f0  that includes the following:\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls3\ilvl1\cf0 {\listtext	\uc0\u9702 	}Your thread library code.\
+\pard\tx1660\tx2160\pardeftab720\li2160\fi-2160
+\ls3\ilvl2\cf0 {\listtext	\uc0\u9642 	}all source file\
+\pard\tx1660\tx2160\pardeftab720\li2160\fi-2160
+\ls3\ilvl2
+\f3 \cf0 {\listtext	\uc0\u9642 	}gtthread.h
+\f0 , unless it is autoamtically generated by the Makefile\
+\pard\tx2380\tx2880\pardeftab720\li2880\fi-2880
+\ls3\ilvl3\cf0 {\listtext	\uc0\u9642 	}submit this even if you use the attached 
+\f3 gtthraed.h
+\f0  unmodified\
+\pard\tx1660\tx2160\pardeftab720\li2160\fi-2160
+\ls3\ilvl2
+\f3 \cf0 {\listtext	\uc0\u9642 	}Makefile
+\f0 \
+\pard\tx2380\tx2880\pardeftab720\li2880\fi-2880
+\ls3\ilvl3\cf0 {\listtext	\uc0\u9642 	}the command 
+\f3 make
+\f0  should build the 
+\f3 gtthread.a
+\f0  library file and your Dining Philosophers binary\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls3\ilvl1\cf0 {\listtext	\uc0\u9702 	}Your implementation code of the Dining Philosophers.\
+\pard\tx1660\tx2160\pardeftab720\li2160\fi-2160
+\ls3\ilvl2\cf0 {\listtext	\uc0\u9642 	}all source code\
+{\listtext	\uc0\u9642 	}your 
+\f3 Makefile
+\f0  should build the Dining Philosophers binary\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls3\ilvl1\cf0 {\listtext	\uc0\u9702 	}A\'a0
+\f3 README
+\f0 \'a0file including:\
+\pard\tx1660\tx2160\pardeftab720\li2160\fi-2160
+\ls3\ilvl2\cf0 {\listtext	\uc0\u9642 	}What Linux platform do you use?\
+{\listtext	\uc0\u9642 	}How the preemptive scheduler is implemented.\
+{\listtext	\uc0\u9642 	}How to compile your library and run your program.\
+{\listtext	\uc0\u9642 	}How you prevent deadlocks in your Dining Philosophers solution.\
+{\listtext	\uc0\u9642 	}Any thoughts you have on the project, including things that work especially well or which don't work.\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls3\ilvl1\cf0 {\listtext	\uc0\u9702 	}Your 
+\f3 Makefile
+\f0 , 
+\f3 gtthread.h
+\f0 , 
+\f3 gtthread.a
+\f0 , Dining Philosophers binary, and README file should all be in (or be built in) the top level directory, not a subdirectory within your tarball.\
+}

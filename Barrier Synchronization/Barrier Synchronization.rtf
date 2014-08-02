@@ -1,0 +1,160 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fnil\fcharset0 TrebuchetMS;\f1\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;\red67\green67\blue67;\red1\green21\blue44;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}
+{\list\listtemplateid4\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid301\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid4}
+{\list\listtemplateid5\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid401\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid5}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}{\listoverride\listid4\listoverridecount0\ls4}{\listoverride\listid5\listoverridecount0\ls5}}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sa348
+
+\f0\b\fs52 \cf0 Project 2: Barrier Synchronization\
+\pard\pardeftab720\sa260
+
+\fs26 \cf0 Read
+\b0 \'a0this assignment description carefully before you begin.\'a0
+\b Start early
+\b0 , because you will be running performance experiments. You will need time to do the experiments and write a write-up after you finish coding, and most of the points for this assignment will come from the experiments and write-up so you'll want enough time to do a good job. Also, there are limited resources for running experiments and if everyone waits until the last week then there will be a lot of contention for these resources. (
+\i You
+\i0 \'a0are solely responsible for finishing on time - too much contention for experimental resources is not an excuse for lateness, so start early!)\
+\'a0\
+\pard\pardeftab720\sa300
+
+\f1\b\fs30 \cf2 Overview\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 The goal of this assignment is to introduce OpenMP, MPI, and barrier synchronization concepts. You will implement several barriers using OpenMP and MPI, and synchronize between multiple threads and machines. You may work in groups of 2, and will document the individual contributions of each team member in your project write-up. (You may use Piazza to help you find a partner.)\
+OpenMP allows you to run parallel algorithms on shared-memory multiprocessor/multicore machines. For this assignment you will implement two spin barriers using OpenMP. MPI allows you to run parallel algorithms on distributed memory systems, such as compute clusters or other distributed systems. You will implement two spin barriers using MPI. Finally, you will choose one of your OpenMP barrier implementations and one of your MPI barrier implementations, and combine the two in an MPI-OpenMP combined program in order to synchronize between multiple cluster nodes that are each running multiple threads.\'a0\
+You will run experiments to evaluate the performance of your barrier implementations. (Information about compute resources for running experiments is below.) You will run your OpenMP barriers on an 8-way SMP (symmetric multi-processor) system, and your MPI and MPI-OpenMP combined experiments on a 12-node twelve-core cluster (12 nodes, and each node has two six-core processors).\
+Finally, you will create a write-up that explains what you did, presents your experimental results, and most importantly, analyzes your results to explain the trends and phenomona you see. (Some hints for analysis are given below.)\
+\'a0\
+\pard\pardeftab720\sa300
+
+\f1\b\fs30 \cf2 Detailed Instructions\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 These instructions are presented in a sequential order. However, depending on how you decide to divide the work with your project parter, you may choose do so some of these things in parallel. That is okay, so long as everything gets done, and you say who did what in your write-up.\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Part 1: Learn about OpenMP and MPI\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 The first thing you want to do is learn how to program, compile, and run OpenMP and MPI programs.\
+You can compile and run OpenMP programs on any linux machine that has gomp installed. All the CoC Red Hat Enterprise Linux systems should have it (I believe). You can try the example code attached to this assignment (openmp.tar.gz), as well as looking at the following informational resources:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls1\ilvl0\cf3 {\listtext	\'95	}{\field{\*\fldinst{HYPERLINK "http://www.openmp.org/"}}{\fldrslt \ul OpenMP Website}}\cf0 \
+\ls1\ilvl0\cf3 {\listtext	\'95	}{\field{\*\fldinst{HYPERLINK "http://www.openmp.org/specs/mp-documents/cspec20.pdf"}}{\fldrslt \ul OpenMP Specification}}\cf0 \
+\ls1\ilvl0\cf3 {\listtext	\'95	}{\field{\*\fldinst{HYPERLINK "http://www.llnl.gov/computing/tutorials/openMP/"}}{\fldrslt \ul Introduction to OpenMP}}\cf0 \
+\pard\pardeftab720\sa260
+\cf0 You can compile and run MPI programs on any linux machine that has openmpi installed. (mpich is another MPI implementation, but we'll be using openmpi for this project. Note:\'a0
+\i openmpi != OpenMP
+\i0 \'a0!!) Unfortunately, most CoC systems do\'a0
+\i not
+\i0 \'a0have either openmpi or mpich installed. That is why we have allocated some cluster nodes for you. Details about using the cluster nodes are below. You can try running the example code attached to this assignment (mpi.tar.gz) on any of the development & testing nodes, as well as looking at the following informational resources:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls2\ilvl0\cf3 {\listtext	\'95	}{\field{\*\fldinst{HYPERLINK "http://www.open-mpi.org/"}}{\fldrslt \ul OpenMPI Website}}\cf0 \
+\ls2\ilvl0\cf3 {\listtext	\'95	}{\field{\*\fldinst{HYPERLINK "http://www.mpi-forum.org/"}}{\fldrslt \ul MPI v2 Specification}}\cf0 \
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Part 2: Develop OpenMP Barriers\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Implement\'a0
+\b two spin barriers using OpenMP
+\b0 . You may choose any two sping barriers you like. (For example, you could use ones from the MCS paper, anything covered in lecture, or any variation on these you think of.) Obviously, your barrier implementations cannot use the built-in OpenMP barrier! Although you can optionally use it as a third barrier in your experiments, as a baseline/control, if you choose.\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Part 3: Develop MPI Barriers\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Implement\'a0
+\b two spin barriers using MPI
+\b0 . At least one of these must be a\'a0
+\i tree-based barrier
+\i0 \'a0(if you choose to do both as tree-based barriers, that's okay too). If you choose,\'a0
+\i one
+\i0 \'a0of these may be the same algorithm you used for one of your OpenMP barriers, but the other one must be different. (However, even if you choose the same algorithm for one of them, you may find that you must implement it very differently using MPI than using OpenMP.) Obviously, your barrier implementations cannot use the built-in MPI barrier! Although you can optionally use it as a third barrier in your experiements, as a baseline/control, if you choose.\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Part 4: Develop MPI-OpenMP Combined Barrier\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 Now choose one of the OpenMP barriers you implemented, and one of the MPI barriers you implemented. Combine them to create a barrier that synchronizes between multiple nodes that are each running multiple threads. (You'll want to be sure to preserve your original code for the two barriers too, so you can still run experiments on them seperately.)\'a0 You can compare the performance of the combined barrier to your standalone MPI barrier.\'a0 (Note that you will need to run more than one MPI process per node in the standalone configuration to make a comparable configuration to one multithreaded MPI process per node in the combined configuration, so that total number of threads is the same when you compare.)\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Part 5: Run Experiments\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 The next step is to perform a performance evaluation of your barriers. You need to write a test harness that runs some OpenMP threads or MPI processes and synchronizes the threads/processes using your barrier implementation. Then your test harness should measure the performance of your barriers in a manner similar to the MCS paper. You should look at the experiments in that paper again and think about how they did them.\
+Measure your\'a0
+\i OpenMP barriers on a fourcore node in Jinx cluster
+\i0 , and\'a0
+\b scale the number of threads from 2 to 8
+\b0 . (1 thread is not really interesting for barriers, and more than 8 threads will show skewed results since the forecore nodes only have eight cores (two 4-core processors) with which to provide true concurrency.)\
+Measure your\'a0
+\i MPI barriers on the sixcore nodes in Jinx cluster
+\i0 . You should\'a0
+\b scale from 2 to 12 MPI processes
+\b0 , one process per sixcore node.\'a0\uc0\u8232 \u8232 Measure your\'a0
+\i MPI-OpenMP combined barrier on the sixcore nodes in Jinx cluster
+\i0 ,\'a0
+\b scaling from 2 to 8 MPI processes running 2 to 8 OpenMP threads per process
+\b0 .\'a0\
+Some things to think about in your experiments:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls3\ilvl0\cf0 {\listtext	\'95	}When scaling from X to Y of something, you don't need to run every single number between X and Y. However, you should run one at X and one at Y, of course, and enough in between to see any interesting trends or phenomona that occur. You'll have to decide at exactly what values you need to run the experiment in order to accomplish this. (Although if you have time and want to, you may run ever single number.)\
+{\listtext	\'95	}You can use the gettimeofday() function to take timing measurements. See the man page for details about how to use it. You can also use some other method if you prefer, but explain in your write-up which measurement tool you used and why you chose it. Consider things like the accuracy of the measurement and the precision of the value returned.\
+{\listtext	\'95	}If you're trying to measure something that's too fast for your measurement tool (i.e.your tool is not precise enough), you can do it a bunch of times in a loop, measure the time to run the entire loop, and the divide by the number of iterations in the loop. This gives the average time for a single loop iteration. Think a moment about why that works, and how that increases the precision of your measurement.\
+{\listtext	\'95	}Finally, once you've chosen a measurement tool, think a bit about how you will take that measurement. You want to be sure you measure the right things, and exclude the wrong things from the measurement. You also want to do something to account for variation in the results (so, for example, you probably don't want to just measure once, but measure a bunch of times and take the average).\
+\pard\pardeftab720
+
+\f1\b\fs28 \cf2 Part 6: Write-Up\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 The last part to create the write-up. This should be either a PDF file, and it should include a\'a0
+\i minimum
+\i0 of the following:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls4\ilvl0\cf0 {\listtext	\'95	}The names of both team members\
+{\listtext	\'95	}An introduction that provides an overview of what you did. (Do not assume the reader has already read this assignment description.)\
+{\listtext	\'95	}An explaination of how the work was divided between the team members (i.e. who did what)\
+{\listtext	\'95	}A description of the barrier algorithms that you implemented. (You do not need to go into as much implementation detail, with pseudocode and so forth, as the MCS paper did. However, you should include a good high-level description of each algorithm. You should\'a0
+\i not
+\i0 \'a0simply say that you implement algorighm X from the paper and refer the reader to the MCS paper for details.)\
+{\listtext	\'95	}An explaination of the experiments, including what experiments you ran, your experimental set-up, and your experimental methodology. (Give thorough details. Do not assume the reader has already read this assignment description.)\
+{\listtext	\'95	}Your experimental results. DO present your data using graphs. DO NOT use tables of numbers when a graph would be better. (Hint: a graph is usually better.) DO NOT include all your raw data in the write-up. (If you want to submit your raw data, you may include it in a separate file in your submission.) Compare both your OpenMP barriers. Compare both your MPI barriers. Present the results for your MPI-OpenMP barrier.\
+{\listtext	\'95	}An analysis of your experimental results. You should explain why you got the results that you did (think about the algorithm details, and the architecture of the machine you exerimented on). Explain any trends or interesting phenomona. If you see anything in your results that you did not expect, explain what you did expect to see and why your actual results are different from that. There should be at least a couple intersting points per experiment - the key is not explain not only the\'a0
+\i what\'a0
+\i0 of your results, but the\'a0
+\i how
+\i0 \'a0and\'a0
+\i why
+\i0 \'a0as well.\
+{\listtext	\'95	}A conclusion.\
+\pard\pardeftab720\sa260
+\cf0 \'a0\
+\pard\pardeftab720\sa300
+
+\f1\b\fs30 \cf2 Resources\
+\pard\pardeftab720\sa260
+
+\f0\b0\fs26 \cf0 You have access to Jinx cluster. Please read carefully instructions in the following website to perform experiments.\uc0\u8232 {\field{\*\fldinst{HYPERLINK "http://support.cc.gatech.edu/facilities/instructional-labs/how-to-access-the-jinx-cluster"}}{\fldrslt \cf3 \ul \ulc3 http://support.cc.gatech.edu/facilities/instructional-labs/how-to-access-the-jinx-cluster\ulnone \uc0\u8232 }}\uc0\u8232 You must use a queue name "cs6210" to run your program on the cluster. Plesae refer the following document and use "#PBS -q cs6210" instead of "#PBS -q class".\u8232 {\field{\*\fldinst{HYPERLINK "https://support.cc.gatech.edu/facilities/instructional-labs/how-to-run-jobs-on-the-jinx-cluster"}}{\fldrslt \cf3 \ul \ulc3 https://support.cc.gatech.edu/facilities/instructional-labs/how-to-run-jobs-on-the-jinx-cluster}}\uc0\u8232 \u8232 Note that you must not use the cluster for development. Develop all implementations (OpenMP, MPI, OpenMP-MPI combination) using your local resource (e.g., a laptop) and make sure your code runs fine. Then perform experiments using Jinx cluster.\'a0\u8232 \'a0\
+\pard\pardeftab720\sa300
+
+\f1\b\fs30 \cf2 Submission Instructions\
+\pard\pardeftab720
+
+\f0\b0\fs26 \cf0 Please submit following results to T-square:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls5\ilvl0\cf0 {\listtext	\'95	}All your code (barrier implementations, experiment test harness, etc.)\
+{\listtext	\'95	}Makefile\
+{\listtext	\'95	}Anything else we may need to compile and run all your barriers\
+{\listtext	\'95	}Experimental data\
+{\listtext	\'95	}Your write-up, that includes all the things listed above (PDF)\
+\pard\pardeftab720\sa260
+\cf0 Only one team member has to submit the project to T-Square - be sure both team members' names are on the write-up!\'a0 The other team member (who is not submitting the project) should simply turn in a file (e.g. text file) with the team members' name in it.\
+In addition, everyone please note that the write-up will be an important part of the project grade.\'a0 It will be a good idea to make sure you create a good write-up.\'a0 The assignment description on T-Square has some guidelines for the content of the write-up, but be through.\'a0 Treating the guidelines like a set of checkmarks and doing the minimum to meet those checkmarks will not earn you full points.\'a0 I expect graduate students to do better the following a checkmark list.\'a0 For an example what what a _good_ write-up looks like, see the MCS paper itself.\'a0 (Although yours doesn't have to be as many pages long as the MCS paper since you're only implementing a subset of the algorithms. Instead, consider the content and style of the paper.)\
+}

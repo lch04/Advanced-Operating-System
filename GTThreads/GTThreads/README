@@ -1,0 +1,25 @@
+
+    Q: What Linux platform do you use?
+    
+    A: I used Ubuntu 13.04 32bit architecture with no virtualization.
+    
+    Q: How the preemptive scheduler is implemented.
+    
+    A: In the gtthread struct, there is a field which points to the next thread; 
+    when the preemptive scheduler function is called, update the current_thread
+    pointer to point to the next thread, then call setcontext function to start
+    executing the context of next thread.
+    
+    Q: How to compile your library and run your program.
+    
+    A: To compile the gtthreads library, navigate in terminal to the folder containing
+    the source code and type "make";
+       To run the dining philosopher program, type the following command: 
+                gcc -Wall -pedantic -o diningphilosophers diningphilosophers.c gtthread.a
+    
+    Q: How you prevent deadlocks in your Dining Philosophers solution.
+    
+    A: Make sure that unlock the mutexes in reverse order of acquiring them.
+    
+    Any thoughts you have on the project, including things that work especially well or which don't work.
+
